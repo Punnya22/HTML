@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>mouseover in js</title>
+</head>
+<body>
+<center>
+<h2  id="h" style="padding-top: 60px;"> Touch me </h2>
+<image id="i" src="/home/user/Punnya/WB/image/halloo.jpeg" width="400px" height="500px" style="padding-top: 50px;" onmouseover="change()"onmouseout="change1()">
+<center>
+
+<script>
+function change(){
+document.getElementById("h").innerHTML = "You Hover over me ";
+document.getElementById("i").src = "/home/user/Punnya/WB/image/find.jpeg";
+}
+function change1(){
+document.getElementById("h").innerHTML = " Touch me ";
+document.getElementById("i").src = "/home/user/Punnya/WB/image/halloo.jpeg";
+}
+</script>
+
+</body>
+</html>
+
