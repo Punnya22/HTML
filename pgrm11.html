@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Online Exam</title>
+</head>
+<body>
+<center>
+<h1>Online Exam</h1>
+<h3 id="timer">Time Left: 05:00</h3>
+<div id="quiz"></div>
+<br>
+<button id="prevBtn" onclick="prevQuestion()">Previous</button>
+<button id="nextBtn" onclick="nextQuestion()">Next</button>
+<button id="submitBtn" onclick="submitExam()">Submit</button>
+<p id="result"></p>
+</center>
+
+<script>
+const questions = [
+{
+question: "What is 2 + 2 ?",
+options: ["2", "3", "4", "5"],
+answer: "4"
+},
+{
+question: "What is 2 * 2 ?",
+options: ["2", "3", "4", "5"],
+answer: "4"
+},
+{
+question: "What does HTML stand for?",
+options: ["Hyper Text Markup Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language", "Hyper Tool Multi Language"],
+answer: "Hyper Text Markup Language"
+},
+{
+question: "What is the capital of India ?",
+options: ["Punjab", "New Delhi", "Assam", "Alapuzha"],
+answer: "New Delhi"
+},
+{
+question: "What is the longest river in the world ?",
+options: ["Chaliyar", "Kaveri", "Nile", "Ganga"],
+answer: "Nile"
+},
+{
+question: "How many colors are there in a rainbow ?",
+options: ["Nine", "Four", "Six", "Seven"],
+answer: "Seven"
+},
+{
+question: "What is the national animal of India ?",
+options: ["Tiger", "Lion", "Elephant", "Kangaroo"],
+answer: "Tiger"
+},
+{
+question: "How many status are there in india ?",
+options: ["28", "34", "24", "25"],
+answer: "28"
+},
+{
+question: "What is the largest mammal on Earth ?",
+options: ["Elephant", "Blue whale", "Giraffe", "Shark"],
+answer: "Blue whale"
+},
+{
+question: "What is 2 * 5?",
+options: ["4", "8", "10", "25"],
+answer: "10"
+}
+];
+let currentQuestion = 0;
+let userAnswers = Array(questions.length).fill("");
+let examDuration = 5 * 60;
+let timerInterval;
+function loadQuestion() {
+const quizDiv = document.getElementById("quiz");
+let q = questions[currentQuestion];
+let html = "<p><b>Q" + (currentQuestion + 1) + ": " + q.question + "</b></p>";
+for(let i = 0; i < q.options.length; i++) {
+let checked = userAnswers[currentQuestion] === q.options[i] ? "checked" : "";
+html += `<input type="radio" name="option" value="${q.options[i]}" ${checked}> ${q.options[i]}<br>`;
+}
+quizDiv.innerHTML = html;
+document.getElementById("prevBtn").disabled = currentQuestion === 0;
+}
+function nextQuestion() {
+saveAnswer();
+if(currentQuestion < questions.length -1) {
+currentQuestion++;
+loadQuestion();
+} else {
+alert("Question is over, You can submit");
+}
+}
+function prevQuestion() {
+saveAnswer();
+if(currentQuestion > 0) {
+currentQuestion--;
+loadQuestion();
+}
+}
+function saveAnswer() {
+const options = document.getElementsByName("option");
+for(let opt of options) {
+if(opt.checked) {
+userAnswers[currentQuestion] = opt.value;
+break;
+}
+}
+}
+function submitExam() {
+saveAnswer();
+clearInterval(timerInterval);
+let score = 0;
+for(let i = 0; i < questions.length; i++) {
+if(userAnswers[i] === questions[i].answer) score++;
+}
+document.getElementById("quiz").innerHTML = "";
+document.getElementById("prevBtn").style.display = "none";
+document.getElementById("nextBtn").style.display = "none";
+document.getElementById("submitBtn").style.display = "none";
+document.getElementById("timer").style.display = "none";
+document.getElementById("result").innerHTML = "<b>Your score: " + score + " / " + questions.length + "</b>";
+}
+function startTimer() {
+const timerDisplay = document.getElementById("timer");
+timerInterval = setInterval(() => {
+let minutes = Math.floor(examDuration / 60);
+let seconds = examDuration % 60;
+timerDisplay.textContent = `Time Left: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+examDuration--;
+if (examDuration < 0) {
+clearInterval(timerInterval);
+alert("Time's up! Submitting your exam...");
+submitExam();
+}
+}, 1000);
+}
+loadQuestion();
+startTimer();
+</script>
+</body>
+</html>
+
